@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
-import { userService } from "./user.service";
+import { AdminServices } from "./admin.service";
 
-const createAdmin = async (req: Request, res: Response) => {
+const getAllAdmin = async (req: Request, res: Response) => {
   try {
-    const result = await userService.createAdmin(req.body);
+    const result = await AdminServices.getAllAdmin();
+
     res.status(200).json({
       success: true,
-      message: "Admin Created Successfully",
+      message: "Admin data retreived Successfully",
       data: result,
     });
   } catch (err) {
@@ -17,7 +18,6 @@ const createAdmin = async (req: Request, res: Response) => {
     });
   }
 };
-
-export const userController = {
-  createAdmin,
+export const AdminController = {
+  getAllAdmin,
 };
