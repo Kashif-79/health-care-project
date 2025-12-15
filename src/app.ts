@@ -1,7 +1,8 @@
-import express, { Application, Request, Response } from "express";
+import express, { Application, NextFunction, Request, Response } from "express";
 import cors from "cors";
-import { userRoutes } from "./app/modules/user/user.routes";
-import { AdminRoutes } from "./app/modules/Admin/admin.routes";
+import router from "./app/routes";
+import globalErrorHandler from "./app/middleware/globalErrorHandler";
+import status from "http-status";
 
 const app: Application = express();
 
@@ -15,7 +16,18 @@ app.get("/", (req: Request, res: Response) => {
   });
 });
 
-app.use("/api/v1/user", userRoutes);
-app.use("/api/v1/admin", AdminRoutes);
+app.use("/api/v1", router);
+app.use(globalErrorHandler);
+
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.status(status.NOT_FOUND).json({
+    success: false,
+    message: "API NOT FOUND",
+    error: {
+      path: req.originalUrl,
+      message: "Your requested routes is not found",
+    },
+  });
+});
 
 export default app;
