@@ -48,7 +48,10 @@ const loginUser = async (payLoad: { email: string; password: string }) => {
 const refreshToken = async (token: string) => {
   let decodedData;
   try {
-    decodedData = jwtHelper.verifyToken(token, "12345");
+    decodedData = jwtHelper.verifyToken(
+      token,
+      config.jwt.refresh_token_secret as Secret
+    );
   } catch (err) {
     throw new Error("You are not authorized");
   }
@@ -75,7 +78,40 @@ const refreshToken = async (token: string) => {
   };
 };
 
+const changePassword = async (user: any, payLoad: any) => {
+  const userData = await prisma.user.findUniqueOrThrow({
+    where: {
+      email: user.email,
+      status: UserStatus.ACTIVE,
+    },
+  });
+
+  const isCorrectPassword: boolean = await bcrypt.compare(
+    payLoad.oldPassword,
+    userData.password
+  );
+  if (!isCorrectPassword) {
+    throw new Error("Password Incorrect");
+  }
+  const hashedPassword: string = await bcrypt.hash(payLoad.newPassword, 12);
+
+  await prisma.user.update({
+    where: {
+      email: userData.email,
+    },
+    data: {
+      password: hashedPassword,
+      needPasswordChange: false,
+    },
+  });
+
+  return {
+    message: "Password Change Successfully",
+  };
+};
+
 export const AuthServices = {
   loginUser,
   refreshToken,
+  changePassword,
 };
