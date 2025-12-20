@@ -1,21 +1,16 @@
 import { Request, Response } from "express";
 import { userService } from "./user.service";
+import sendResponse from "../../../shared/sendResponse";
+import status from "http-status";
 
 const createAdmin = async (req: Request, res: Response) => {
-  try {
-    const result = await userService.createAdmin(req.body);
-    res.status(200).json({
-      success: true,
-      message: "Admin Created Successfully",
-      data: result,
-    });
-  } catch (err) {
-    res.status(500).json({
-      success: false,
-      message: err?.name || "Something went wrong",
-      error: err,
-    });
-  }
+  const result = await userService.createAdmin(req);
+  sendResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: "Admin data created successfully",
+    data: result,
+  });
 };
 
 export const userController = {
