@@ -4,6 +4,9 @@ import prisma from "../../../shared/prisma";
 import bcrypt from "bcrypt";
 import jwt, { JwtPayload, Secret } from "jsonwebtoken";
 import config from "../../../config";
+import emailSender from "./emailSender";
+import ApiError from "../../errors/ApiErrors";
+import status from "http-status";
 const loginUser = async (payLoad: { email: string; password: string }) => {
   const userData = await prisma.user.findFirstOrThrow({
     where: {
@@ -119,15 +122,60 @@ const forgotPassword = async (payLoad: { email: string }) => {
 
   const resetPasswordToken = jwtHelper.generateToken(
     { email: userData.email, role: userData.role },
-    config.jwt.reset_passord_token as Secret,
+    config.jwt.reset_passord_secret as Secret,
     config.jwt.reset_passord_token_expires_in as string
   );
 
   const resetPassLink =
     config.reset_passord_link +
-    `?userId${userData.id}&token=${resetPasswordToken}`;
+    `?userId=${userData.id}&token=${resetPasswordToken}`;
+  await emailSender(
+    userData.email,
 
+    `<div>
+      <p>Dear User,</p>
+        <p>Your password reset link 
+          <a href=${resetPassLink}>
+            <button>
+              Reset Password
+            </button>
+          </a>
+        </p>
+      </div>`
+  );
   console.log(resetPassLink);
+};
+
+const resetPassword = async (
+  token: string,
+  payLoad: { id: string; password: string }
+) => {
+  const userData = await prisma.user.findUniqueOrThrow({
+    where: {
+      id: payLoad.id,
+      status: UserStatus.ACTIVE,
+    },
+  });
+  const isValidToken = jwtHelper.verifyToken(
+    token,
+    config.jwt.reset_passord_secret as Secret
+  );
+  if (!isValidToken) {
+    throw new ApiError(status.FORBIDDEN, "Forbidden!");
+  }
+  const hashedPassword: string = await bcrypt.hash(payLoad.password, 12);
+
+  await prisma.user.update({
+    where: {
+      id: payLoad.id,
+    },
+    data: {
+      password: hashedPassword,
+    },
+  });
+  return {
+    message: "Password chnaged Successfully",
+  };
 };
 
 export const AuthServices = {
@@ -135,4 +183,5 @@ export const AuthServices = {
   refreshToken,
   changePassword,
   forgotPassword,
+  resetPassword,
 };
