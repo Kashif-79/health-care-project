@@ -4,7 +4,6 @@ import sendResponse from "../../../shared/sendResponse";
 import status from "http-status";
 
 const createAdmin = async (req: Request, res: Response) => {
-  // console.log(req.file);
   const result = await userService.createAdmin(req);
   sendResponse(res, {
     statusCode: status.OK,
@@ -13,7 +12,17 @@ const createAdmin = async (req: Request, res: Response) => {
     data: result,
   });
 };
+const createDoctor = async (req: Request, res: Response) => {
+  const result = await userService.createDoctor(req);
+  sendResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: "Doctor data created successfully",
+    data: result,
+  });
+};
 
 export const userController = {
   createAdmin,
+  createDoctor,
 };
