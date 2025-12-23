@@ -1,4 +1,4 @@
-import { Gender } from "@prisma/client";
+import { BloodGroup, Gender,  } from "@prisma/client";
 import z from "zod";
 
 const createAdmin = z.object({
@@ -28,8 +28,34 @@ const createDoctor = z.object({
     designation: z.string().min(1, "Designation is required"),
   }),
 });
+const createPatient = z.object({
+  password: z.string().min(1, "Password is required"),
+  patient: z.object({
+    name: z.string().min(1, "Name is required"),
+    email: z.string().min(1, "Email is required"),
+    contactNumber: z.string().min(1, "Contact number is required"),
+    address: z.string().optional(),
+    age: z
+      .number()
+      .min(0, "Age must be a positive number"),
+    gender: z.enum([Gender.FEMALE, Gender.MALE]),
+    bloodGroup: z
+      .enum([
+        BloodGroup.A_POS,
+        BloodGroup.A_NEG,
+        BloodGroup.B_POS,
+        BloodGroup.B_NEG,
+        BloodGroup.AB_POS,
+        BloodGroup.AB_NEG,
+        BloodGroup.O_POS,
+        BloodGroup.O_NEG,
+      ])
+      .optional(),
+  }),
+});
 
 export const UserValidation = {
   createAdmin,
   createDoctor,
+  createPatient
 };
