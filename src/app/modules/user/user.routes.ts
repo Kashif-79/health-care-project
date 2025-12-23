@@ -7,13 +7,19 @@ import { UserValidation } from "./user.validation";
 
 const router = express.Router();
 
+router.get(
+  "/",
+  auth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  userController.getAllUser
+);
+
 router.post(
   "/create-admin",
   auth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
   fileUploader.upload.single("file"),
   (req: Request, res: Response, next: NextFunction) => {
     req.body = UserValidation.createAdmin.parse(JSON.parse(req.body.data));
-    return userController.createAdmin(req, res);
+    return userController.createAdmin(req, res, next);
   }
 );
 router.post(
@@ -22,17 +28,22 @@ router.post(
   fileUploader.upload.single("file"),
   (req: Request, res: Response, next: NextFunction) => {
     req.body = UserValidation.createDoctor.parse(JSON.parse(req.body.data));
-    return userController.createDoctor(req, res);
+    return userController.createDoctor(req, res, next);
   }
 );
 router.post(
   "/create-patient",
-  auth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
   fileUploader.upload.single("file"),
   (req: Request, res: Response, next: NextFunction) => {
     req.body = UserValidation.createPatient.parse(JSON.parse(req.body.data));
-    return userController.createPatient(req, res);
+    return userController.createPatient(req, res, next);
   }
+);
+
+router.patch(
+  "/:id/status",
+  auth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  userController.changeProfileStatus
 );
 
 export const userRoutes = router;
