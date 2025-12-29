@@ -2,7 +2,7 @@ import { UserStatus } from "@prisma/client";
 import { jwtHelper } from "../../../helpars/jwtHelper";
 import prisma from "../../../shared/prisma";
 import bcrypt from "bcrypt";
-import jwt, { JwtPayload, Secret } from "jsonwebtoken";
+import { Secret } from "jsonwebtoken";
 import config from "../../../config";
 import emailSender from "./emailSender";
 import ApiError from "../../errors/ApiErrors";
