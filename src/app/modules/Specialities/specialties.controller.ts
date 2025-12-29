@@ -4,6 +4,26 @@ import sendResponse from "../../../shared/sendResponse";
 import status from "http-status";
 import { SpecialitiesService } from "./specialties.service";
 
+const getAllSpecialties = catchAsync(async (req: Request, res: Response) => {
+  const result = await SpecialitiesService.getAllSpecialties();
+  sendResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: "Specailties retreived successfully",
+    data: result,
+  });
+});
+const getSpecialtiesById = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await SpecialitiesService.getSpecialtiesById(id);
+  sendResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: "Specailties retreived successfully",
+    data: result,
+  });
+});
+
 const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
   const result = await SpecialitiesService.insertIntoDB(req);
 
@@ -17,4 +37,6 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
 
 export const SpecialitiesController = {
   insertIntoDB,
+  getAllSpecialties,
+  getSpecialtiesById,
 };

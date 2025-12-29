@@ -5,6 +5,9 @@ import { SpecailtiesValidation } from "./specialties.validation";
 
 const router = express.Router();
 
+router.get("/", SpecialitiesController.getAllSpecialties);
+router.get("/:id", SpecialitiesController.getSpecialtiesById);
+
 router.post(
   "/create-specialties",
   fileUploader.upload.single("file"),
