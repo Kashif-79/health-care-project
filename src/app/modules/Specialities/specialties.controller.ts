@@ -35,8 +35,21 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const updateIntoDB = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const result = await SpecialitiesService.updateIntoDB(id, req.body);
+  sendResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: "Specailties data updated successfully",
+    data: result,
+  });
+});
+
 export const SpecialitiesController = {
   insertIntoDB,
   getAllSpecialties,
   getSpecialtiesById,
+  updateIntoDB,
 };

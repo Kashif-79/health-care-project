@@ -2,6 +2,7 @@ import { Request } from "express";
 import { fileUploader } from "../../../helpars/fileUploader";
 import prisma from "../../../shared/prisma";
 import { IFile } from "../../interfaces/file";
+import { Specialties } from "@prisma/client";
 
 const getAllSpecialties = async () => {
   const result = await prisma.specialties.findMany();
@@ -31,8 +32,28 @@ const insertIntoDB = async (req: Request) => {
   return result;
 };
 
+const updateIntoDB = async (
+  id: string,
+  data: Partial<Specialties>
+): Promise<Specialties> => {
+  await prisma.specialties.findUniqueOrThrow({
+    where: {
+      id,
+    },
+  });
+  const result = await prisma.specialties.update({
+    where: {
+      id,
+    },
+    data,
+  });
+
+  return result;
+};
+
 export const SpecialitiesService = {
   insertIntoDB,
   getAllSpecialties,
   getSpecialtiesById,
+  updateIntoDB,
 };
