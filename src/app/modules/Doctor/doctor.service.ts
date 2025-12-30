@@ -17,7 +17,7 @@ const getAllDoctorFromDB = async (
     andCondition.push({
       OR: doctorSearchAbleFields.map((field) => ({
         [field]: {
-          contains: params.searchTerm,
+          contains: searchTerm,
           mode: "insensitive",
         },
       })),
@@ -49,11 +49,12 @@ const getAllDoctorFromDB = async (
     });
   }
 
-  andCondition.push({
-    isDeleted: false,
-  });
+  // andCondition.push({
+  //   isDeleted: false,
+  // });
 
-  const whereCondition: Prisma.DoctorWhereInput = { AND: andCondition };
+  const whereCondition: Prisma.DoctorWhereInput =
+    andCondition.length > 0 ? { AND: andCondition } : {};
 
   const result = await prisma.doctor.findMany({
     where: whereCondition,

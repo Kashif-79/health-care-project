@@ -1,4 +1,4 @@
-export const doctorFilterablesFields = [
+export const doctorFilterablesFields: string[] = [
   "name",
   "email",
   "searchTerm",
@@ -6,11 +6,11 @@ export const doctorFilterablesFields = [
   "address",
   "qualification",
 ];
-export const doctorSearchAbleFields = [
+export const doctorSearchAbleFields: string[] = [
   "name",
   "email",
   "contactNumber",
   "appointmentFee",
-  "gender",
+  // "gender",
   "specialties",
 ];
