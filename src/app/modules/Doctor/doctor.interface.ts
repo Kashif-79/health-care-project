@@ -3,5 +3,9 @@ export type IDoctorFilterRequest = {
   email?: string | undefined;
   contactNumber?: string | undefined;
   searchTerm?: string | undefined;
-  specialties?: string | undefined;
+  // specialties?: string | undefined;
+};
+export type ISpecialties = {
+  specialtiesId: string;
+  isDeleted?: null;
 };
