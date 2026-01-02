@@ -9,7 +9,4 @@ export const doctorSearchAbleFields: string[] = [
   "name",
   "email",
   "contactNumber",
-  "appointmentFee",
-  // "searchterm",
-  // "gender",
 ];

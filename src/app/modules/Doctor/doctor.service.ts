@@ -39,7 +39,8 @@ const getAllDoctorFromDB = async (
     isDeleted: false,
   });
 
-  const whereCondition: Prisma.DoctorWhereInput = { AND: andCondition };
+  const whereCondition: Prisma.DoctorWhereInput =
+    andCondition.length > 0 ? { AND: andCondition } : {};
 
   const result = await prisma.doctor.findMany({
     where: whereCondition,
@@ -53,10 +54,13 @@ const getAllDoctorFromDB = async (
         : {
             createdAt: "desc",
           },
-    // include: {
-    //   medicalReport: true,
-    //   patientHeathData: true,
-    // },
+    include: {
+      doctorSpecialties: {
+        include: {
+          specialties: true,
+        },
+      },
+    },
   });
   const total = await prisma.doctor.count({
     where: whereCondition,
