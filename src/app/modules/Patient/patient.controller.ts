@@ -31,20 +31,20 @@ const getById = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// const updateIntoDB = catchAsync(async (req: Request, res: Response) => {
-//   const { id } = req.params;
+const updateIntoDB = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
 
-//   const result = await DoctorServices.updateIntoDB(id, req.body);
-//   sendResponse(res, {
-//     statusCode: status.OK,
-//     success: true,
-//     message: "Specailties data updated successfully",
-//     data: result,
-//   });
-// });
+  const result = await PatientServices.updateIntoDB(id, req.body);
+  sendResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: "Patient data updated successfully",
+    data: result,
+  });
+});
 
 export const PatientController = {
   getAllPatient,
   getById,
-  //   updateIntoDB,
+  updateIntoDB,
 };

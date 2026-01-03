@@ -122,20 +122,20 @@ model PatientHeathData {
   dateOfBirth        String
   gender             Gender
   bloodGroup         BloodGroup
-  hasAllergies       Boolean
-  hasDiabetic        Boolean
+  hasAllergies       Boolean?      @default(false)
+  hasDiabetic        Boolean?      @default(false)
   height             String
   weight             String
-  smokingStatus      Boolean
-  meritalStatus      MetiralStatus
-  detaryPreferences  String
-  pregnencyStatus    Boolean
-  mentalHelthHistory String
-  immunizationStatus String
-  previousSurgeries  Boolean
-  recentAnxiety      Boolean
-  recentDepression   Boolean
-  mentalStatus       String
+  smokingStatus      Boolean?      @default(false)
+  meritalStatus      MetiralStatus @default(UNMARRIED)
+  detaryPreferences  String?
+  pregnencyStatus    Boolean?      @default(false)
+  mentalHelthHistory String?
+  immunizationStatus String?
+  previousSurgeries  Boolean?      @default(false)
+  recentAnxiety      Boolean?      @default(false)
+  recentDepression   Boolean?      @default(false)
+  mentalStatus       String?
   createdAt          DateTime      @default(now())
   updatedAt          DateTime      @updatedAt
 

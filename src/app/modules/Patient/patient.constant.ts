@@ -8,5 +8,4 @@ export const patientSearchAbleFields: string[] = [
   "name",
   "email",
   "contactNumber",
-  // "gender",
 ];
