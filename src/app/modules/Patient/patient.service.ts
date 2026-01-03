@@ -2,7 +2,7 @@ import { Doctor, Patient, Prisma } from "@prisma/client";
 import { paginationHelpar } from "../../../helpars/paginationHelper";
 import { IPaginationOptions } from "../../interfaces/pagination";
 import prisma from "../../../shared/prisma";
-import { IPatientFilterRequest } from "./patient.interface";
+import { IPatientFilterRequest, IPatientUpdate } from "./patient.interface";
 import { patientSearchAbleFields } from "./patient.constant";
 
 const getAllPatientFromDB = async (
@@ -82,21 +82,57 @@ const getByIdFromDB = async (id: string): Promise<Patient | null> => {
   return result;
 };
 
-const updateIntoDB = async (id: string, payLoad: any) => {
-  await prisma.patient.findFirstOrThrow({
+const updateIntoDB = async (
+  id: string,
+  payLoad: Partial<IPatientUpdate>
+): Promise<Patient | null> => {
+  const { patientHeathData, medicalReport, ...patientData } = payLoad;
+
+  const patientInfo = await prisma.patient.findFirstOrThrow({
     where: {
       id,
+      isDeleted: false,
     },
   });
 
-  const result = await prisma.patient.update({
-    where: {
-      id,
-    },
-    data: payLoad,
+  await prisma.$transaction(async (transactionCleint) => {
+    await transactionCleint.patient.update({
+      where: {
+        id,
+      },
+      data: patientData,
+      include: {
+        patientHeathData: true,
+        medicalReport: true,
+      },
+    });
+    // patient healthData
+    if (patientHeathData) {
+      await transactionCleint.patientHeathData.upsert({
+        where: {
+          patientId: patientInfo.id,
+        },
+        update: patientHeathData,
+        create: { ...patientHeathData, patientId: patientInfo.id },
+      });
+    }
+    if (medicalReport) {
+      await transactionCleint.medicalReport.create({
+        data: { ...medicalReport, patientId: patientInfo.id },
+      });
+    }
   });
 
-  return result;
+  const responseData = await prisma.patient.findUnique({
+    where: {
+      id: patientInfo.id,
+    },
+    include: {
+      patientHeathData: true,
+      medicalReport: true,
+    },
+  });
+  return responseData;
 };
 
 export const PatientServices = {
