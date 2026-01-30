@@ -8,7 +8,10 @@ import { IAuthUser } from "../../interfaces/common";
 const inserIntoDB = catchAsync(
   async (req: Request & { user?: IAuthUser }, res: Response) => {
     const user = req.user;
-    const result = await DoctorScheduleService.inserIntoDB(user, req.body);
+    const result = await DoctorScheduleService.inserIntoDB(
+      user as IAuthUser,
+      req.body,
+    );
 
     sendResponse(res, {
       statusCode: status.OK,

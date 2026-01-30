@@ -11,10 +11,6 @@ router.post(
   auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
   ScheduleController.inserIntoDB,
 );
-router.get(
-  "/",
-  // auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
-  ScheduleController.getAllFromDB,
-);
+router.get("/", auth(UserRole.SUPER_ADMIN), ScheduleController.getAllFromDB);
 
 export const ScheduleRoutes = router;

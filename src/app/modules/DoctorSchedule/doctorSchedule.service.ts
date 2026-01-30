@@ -1,7 +1,8 @@
 import prisma from "../../../shared/prisma";
+import { IAuthUser } from "../../interfaces/common";
 
 const inserIntoDB = async (
-  user: any,
+  user: IAuthUser,
   payload: {
     scheduleIds: string[];
   },
