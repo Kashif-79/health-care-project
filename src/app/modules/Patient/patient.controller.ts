@@ -22,7 +22,7 @@ const getAllPatient: RequestHandler = catchAsync(async (req, res) => {
 const getById = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  const result = await PatientServices.getByIdFromDB(id);
+  const result = await PatientServices.getByIdFromDB(id as string);
   sendResponse(res, {
     statusCode: status.OK,
     success: true,
@@ -34,7 +34,7 @@ const getById = catchAsync(async (req: Request, res: Response) => {
 const updateIntoDB = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  const result = await PatientServices.updateIntoDB(id, req.body);
+  const result = await PatientServices.updateIntoDB(id as string, req.body);
   sendResponse(res, {
     statusCode: status.OK,
     success: true,
