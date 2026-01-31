@@ -8,9 +8,10 @@ const router = express.Router();
 
 router.post(
   "/",
-  auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
+  auth(UserRole.DOCTOR, UserRole.ADMIN),
   ScheduleController.inserIntoDB,
 );
-router.get("/", auth(UserRole.SUPER_ADMIN), ScheduleController.getAllFromDB);
+router.get("/", auth(UserRole.DOCTOR), ScheduleController.getAllFromDB);
+// router.get("/:id", auth(UserRole.DOCTOR), ScheduleController.getAllFromDB);
 
 export const ScheduleRoutes = router;
