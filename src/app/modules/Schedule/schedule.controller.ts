@@ -6,8 +6,8 @@ import status from "http-status";
 import pick from "../../../shared/pick";
 import { IAuthUser } from "../../interfaces/common";
 
-const inserIntoDB = catchAsync(async (req: Request, res: Response) => {
-  const result = await ScheduleService.inserIntoDB(req.body);
+const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
+  const result = await ScheduleService.insertIntoDB(req.body);
 
   sendResponse(res, {
     statusCode: status.OK,
@@ -38,6 +38,6 @@ const getAllFromDB = catchAsync(
 );
 
 export const ScheduleController = {
-  inserIntoDB,
+  insertIntoDB,
   getAllFromDB,
 };

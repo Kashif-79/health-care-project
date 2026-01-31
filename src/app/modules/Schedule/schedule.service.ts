@@ -6,7 +6,7 @@ import { paginationHelpar } from "../../../helpars/paginationHelper";
 import { Prisma } from "@prisma/client";
 import { IAuthUser } from "../../interfaces/common";
 
-const inserIntoDB = async (payload: ISchedule) => {
+const insertIntoDB = async (payload: ISchedule) => {
   const { startDate, endDate, startTime, endTime } = payload;
 
   const interverlTime = 30;
@@ -154,6 +154,6 @@ const getAllFromDB = async (
 };
 
 export const ScheduleService = {
-  inserIntoDB,
+  insertIntoDB,
   getAllFromDB,
 };
