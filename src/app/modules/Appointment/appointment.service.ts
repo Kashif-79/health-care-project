@@ -16,7 +16,8 @@ const insertIntoDB = async (user: IAuthUser, payLoad: any) => {
       id: payLoad.doctorId,
     },
   });
-  await prisma.doctorSchedules.findFirstOrThrow({
+
+  const doctorSchedulesData = await prisma.doctorSchedules.findFirstOrThrow({
     where: {
       doctorId: doctorData.id,
       scheduleId: payLoad.scheduleId,
